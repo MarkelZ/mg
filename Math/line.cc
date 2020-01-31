@@ -22,6 +22,9 @@ Line & Line::operator=(const Line & line) {
 // Note: Check than A and B are not too close!
 
 void Line::setFromAtoB(const Vector3 & A, const Vector3 & B) {
+	m_O = A;
+	m_d = B - A;
+	m_d.normalize();
 }
 
 // @@ TODO: Give the point corresponding to parameter u
