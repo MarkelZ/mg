@@ -16,7 +16,10 @@
 //    IINTERSECT intersect
 
 int BSpherePlaneIntersect(const BSphere *bs, Plane *pl) {
-
+	float dist = pl->m_n.dot(bs->m_centre) - pl->m_d;
+	if (abs(dist) <= bs->m_radius) return IINTERSECT;
+	if (dist >= 0) return +IREJECT;
+	return -IREJECT;
 }
 
 
@@ -26,7 +29,11 @@ int BSpherePlaneIntersect(const BSphere *bs, Plane *pl) {
 //    IREJECT don't intersect
 
 int  BBoxBBoxIntersect(const BBox *bba, const BBox *bbb ) {
-
+	if (bba->m_max[0] >= bbb->m_min[0] && bba->m_min[0] <= bbb->m_max[0] &&
+		bba->m_max[1] >= bbb->m_min[1] && bba->m_min[1] <= bbb->m_max[1] &&
+		bba->m_max[2] >= bbb->m_min[2] && bba->m_min[2] <= bbb->m_max[2])
+		return IINTERSECT;
+	return IREJECT;
 }
 
 // @@ TODO: test if a BBox and a plane intersect.
@@ -35,9 +42,26 @@ int  BBoxBBoxIntersect(const BBox *bba, const BBox *bbb ) {
 //   -IREJECT inside
 //    IINTERSECT intersect
 
-int  BBoxPlaneIntersect (const BBox *theBBox, Plane *thePlane) {
-
-}
+int  BBoxPlaneIntersect (const BBox *bb, Plane *pl) {
+	Vector3 a, A;
+	for (int i = 0; i < 3; i++){
+		if (pl->m_n[i] >= 0) {
+			a[i] = bb->m_min[i];
+			A[i] = bb->m_max[i];
+		}
+		else
+		{
+			a[i] = bb->m_max[i];
+			A[i] = bb->m_min[i];
+		}
+	}
+	
+	float dista = pl->m_n.dot(a) - pl->m_d;
+	float distA = pl->m_n.dot(A) - pl->m_d;
+	if (dista > 0) return +IREJECT;
+	if (distA < 0) return -IREJECT;
+	return IINTERSECT;
+} 
 
 // Test if two BSpheres intersect.
 //! Returns :

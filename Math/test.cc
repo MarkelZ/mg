@@ -783,12 +783,7 @@ void mainMenu() {
 
 
 int main() {
-	Line l;
-	l.setFromAtoB(Vector3(1.0, 1.0, 1.0), Vector3(2.0, 2.0, 2.0));
-	l.print();
-	Vector3 P = l.at(2.0);
-	P.print();
-	//mainMenu
+	mainMenu();
 	printf("\n");
 	return 0;
 }
