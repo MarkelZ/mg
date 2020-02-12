@@ -201,7 +201,7 @@ void create_scene_tmesh() {
 	mesh->addTriangle(0, 4, 1); // P0 - P1 - P2
 	mesh->addTriangle(1, 4, 5); // P2 - P3 - P0
 	mesh->addTriangle(1, 5, 2); // P0 - P1 - P2
-	mesh->addTriangle(1, 6, 2); // P2 - P3 - P0
+	mesh->addTriangle(2, 5, 6); // P2 - P3 - P0
 
 	gObj = GObjectManager::instance()->create("MG_GOBJ");
 	gObj->add(mesh);

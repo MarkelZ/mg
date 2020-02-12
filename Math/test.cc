@@ -783,6 +783,12 @@ void mainMenu() {
 
 
 int main() {
+	// Vector3 P = Vector3(1, 2, 3);
+	// Vector3 V = Vector3(3, 2, 1);
+	// Trfm3D M;
+	// M.setTrans(Vector3(1, 1, 1));
+	// M.transformPoint(P).print();
+	// M.transformVector(V).print();
 	mainMenu();
 	printf("\n");
 	return 0;

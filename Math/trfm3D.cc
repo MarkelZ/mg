@@ -197,7 +197,7 @@ void Trfm3D::clone( const Trfm3D *T ) {	clone(*T); }
 
 Vector3 Trfm3D::transformPoint(const Vector3 & P) const {
 	Vector3 res;
-
+	res = m_tr + m_scl * (m_c1 * P[0] + m_c2 * P[1] + m_c3 * P[2]);
 	return res;
 }
 
@@ -209,7 +209,7 @@ Vector3 Trfm3D::transformPoint(const Vector3 & P) const {
 
 Vector3 Trfm3D::transformVector(const Vector3 & V) const {
 	Vector3 res;
-
+	res = m_scl * (m_c1 * V[0] + m_c2 * V[1] + m_c3 * V[2]);
 	return res;
 }
 
@@ -396,7 +396,9 @@ void Trfm3D::setScale(float scale ) {
 //
 
 void Trfm3D::setRotAxis(const Vector3 & V, const Vector3 & P, float angle ) {
-
+	setTrans(P);
+	addRotVec(V, angle);
+	addTrans(-1*P);
 }
 
 
