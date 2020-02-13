@@ -185,10 +185,14 @@ void create_scene_tmesh() {
 	mesh->addPoint(Vector3(-0.25, -0.25, -0.25)); // P1
 	mesh->addPoint(Vector3(0.25, -0.25, -0.25)); // P2
 	mesh->addPoint(Vector3(0.25,  0.25, -0.25)); // P3
-	mesh->addPoint(Vector3(0,  0.5, -0.75)); // P4
-	mesh->addPoint(Vector3(0, 0, -0.75)); // P5
-	mesh->addPoint(Vector3(0.5, 0, -0.75)); // P6
-	mesh->addPoint(Vector3(0.5,  0.5, -0.75)); // P7
+	// mesh->addPoint(Vector3(0,  0.5, -0.75)); // P4
+	// mesh->addPoint(Vector3(0, 0, -0.75)); // P5
+	// mesh->addPoint(Vector3(0.5, 0, -0.75)); // P6
+	// mesh->addPoint(Vector3(0.5,  0.5, -0.75)); // P7
+	mesh->addPoint(Vector3(-0.25,  0.25, 0.25)); // P4
+	mesh->addPoint(Vector3(-0.25, -0.25, 0.25)); // P5
+	mesh->addPoint(Vector3(0.25, -0.25, 0.25)); // P6
+	mesh->addPoint(Vector3(0.25,  0.25, 0.25)); // P7
 
 	mesh->addTriangle(0, 1, 2); // P0 - P1 - P2
 	mesh->addTriangle(2, 3, 0); // P2 - P3 - P0
@@ -196,8 +200,8 @@ void create_scene_tmesh() {
 	mesh->addTriangle(4, 7, 6); // P2 - P3 - P0
 	mesh->addTriangle(0, 3, 4); // P0 - P1 - P2
 	mesh->addTriangle(3, 7, 4); // P2 - P3 - P0
-	mesh->addTriangle(2, 7, 3); // P0 - P1 - P2
-	mesh->addTriangle(2, 6, 7); // P2 - P3 - P0
+	mesh->addTriangle(2, 6, 3); // P0 - P1 - P2
+	mesh->addTriangle(3, 6, 7); // P2 - P3 - P0
 	mesh->addTriangle(0, 4, 1); // P0 - P1 - P2
 	mesh->addTriangle(1, 4, 5); // P2 - P3 - P0
 	mesh->addTriangle(1, 5, 2); // P0 - P1 - P2
