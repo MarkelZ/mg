@@ -268,8 +268,10 @@ void Node::addChild(Node *theChild) {
 	if (theChild == 0) return;
 	if (m_gObject) {
 		// node has a gObject, so print warning
+		fprintf(stderr, "Warning: this node has a geometric object.\n");
 	} else {
 		// node does not have gObject, so attach child
+		m_children.push_back(theChild);
 	}
 }
 
@@ -388,6 +390,16 @@ void Node::draw() {
 
 	/* =================== PUT YOUR CODE HERE ====================== */
 
+	rs->push();
+	if (m_gObject) {
+		m_gObject->draw();
+	} else {
+		for(list<Node *>::const_iterator it = m_children.begin(), end = m_children.end();it != end; ++it) {
+			const Node *theChild = *it;
+		//    theChild->print(); // or any other thing
+		}
+	}
+	rs->pop();
 
 	/* =================== END YOUR CODE HERE ====================== */
 
