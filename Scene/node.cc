@@ -295,6 +295,8 @@ void Node::detach() {
 //    - placementWC of node and parents are up-to-date
 
 void Node::propagateBBRoot() {
+	updateBB();
+	if (m_parent) m_parent->propagateBBRoot();	
 }
 
 // @@ TODO: auxiliary function
@@ -323,6 +325,16 @@ void Node::propagateBBRoot() {
 //    See Recipe 1 in for knowing how to iterate through children.
 
 void Node::updateBB () {
+	for (list<Node *>::iterator it = m_children.begin(), end = m_children.end(); it != end; ++it) {
+		Node *theChild = *it;
+		BBox *box = theChild->m_containerWC;
+		for (int i = 0; i < 3; i++) {
+			if (box->m_min[i] < m_containerWC->m_min[i])
+				m_containerWC->m_min[i] = box->m_min[i];
+			if (box->m_max[i] > m_containerWC->m_max[i])
+				m_containerWC->m_max[i] = box->m_max[i];
+		}
+	}
 }
 
 // @@ TODO: Update WC (world coordinates matrix) of a node and
@@ -341,6 +353,16 @@ void Node::updateBB () {
 //    See Recipe 1 in for knowing how to iterate through children.
 
 void Node::updateWC() {
+	if (m_parent) {
+		m_placementWC->clone(m_parent->m_placementWC);
+		m_placementWC->add(m_placement);
+	} else {
+		m_placementWC = m_placement;
+	}
+	for (list<Node *>::iterator it = m_children.begin(), end = m_children.end(); it != end; ++it) {
+		Node *theChild = *it;
+		theChild->updateWC();
+	}
 }
 
 // @@ TODO:
@@ -352,6 +374,8 @@ void Node::updateWC() {
 // - Propagate Bounding Box to root (propagateBBRoot), starting from the parent, if parent exists.
 
 void Node::updateGS() {
+	updateWC();
+	if (m_parent) m_parent->propagateBBRoot();
 }
 
 // @@ TODO:
