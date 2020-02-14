@@ -264,7 +264,6 @@ Node * Node::cycleChild(size_t idx) {
 // Print a warning (and do nothing) if node already has an gObject.
 
 void Node::addChild(Node *theChild) {
-
 	if (theChild == 0) return;
 	if (m_gObject) {
 		// node has a gObject, so print warning
@@ -276,7 +275,6 @@ void Node::addChild(Node *theChild) {
 }
 
 void Node::detach() {
-
 	Node *theParent;
 	theParent = m_parent;
 	if (theParent == 0) return; // already detached (or root node)
@@ -389,18 +387,17 @@ void Node::draw() {
 		BBoxGL::draw( m_containerWC );
 
 	/* =================== PUT YOUR CODE HERE ====================== */
-
-	rs->push();
+	rs->push(RenderState::modelview);
+	rs->addTrfm(RenderState::modelview, m_placement);
 	if (m_gObject) {
 		m_gObject->draw();
 	} else {
-		for(list<Node *>::const_iterator it = m_children.begin(), end = m_children.end();it != end; ++it) {
-			const Node *theChild = *it;
-		//    theChild->print(); // or any other thing
+		for (list<Node *>::iterator it = m_children.begin(), end = m_children.end(); it != end; ++it) {
+			Node *theChild = *it;
+			theChild->draw();
 		}
 	}
-	rs->pop();
-
+	rs->pop(RenderState::modelview);
 	/* =================== END YOUR CODE HERE ====================== */
 
 	// Restore shaders
