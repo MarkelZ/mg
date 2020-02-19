@@ -270,6 +270,8 @@ void Node::addChild(Node *theChild) {
 		fprintf(stderr, "Warning: this node has a geometric object.\n");
 	} else {
 		// node does not have gObject, so attach child
+		theChild->m_parent = this;
+		theChild->updateGS();
 		m_children.push_back(theChild);
 		propagateBBRoot();
 	}
@@ -327,9 +329,14 @@ void Node::propagateBBRoot() {
 
 void Node::updateBB () {
 	m_containerWC->init();
-	for (list<Node *>::iterator it = m_children.begin(), end = m_children.end(); it != end; ++it) {
-		Node *theChild = *it;
-		m_containerWC->include(theChild->m_containerWC);
+	if (m_gObject) {
+		m_containerWC->clone(m_gObject->getContainer());
+		m_containerWC->transform(m_placementWC);
+	} else {
+		for (list<Node *>::iterator it = m_children.begin(), end = m_children.end(); it != end; ++it) {
+			Node *theChild = *it;
+			m_containerWC->include(theChild->m_containerWC);
+		}
 	}
 }
 
@@ -371,6 +378,7 @@ void Node::updateWC() {
 
 void Node::updateGS() {
 	updateWC();
+	updateBB();
 	if (m_parent) m_parent->propagateBBRoot();
 }
 
@@ -403,12 +411,12 @@ void Node::draw() {
 	}
 
 	// Print BBoxes
-	if(rs->getBBoxDraw() || m_drawBBox)
+	if (rs->getBBoxDraw() || m_drawBBox)
 		BBoxGL::draw( m_containerWC );
 
 	/* =================== PUT YOUR CODE HERE ====================== */
 	rs->push(RenderState::modelview);
-	rs->addTrfm(RenderState::modelview, m_placement);
+	rs->addTrfm(RenderState::modelview, m_placementWC);
 	if (m_gObject) {
 		m_gObject->draw();
 	} else {
