@@ -271,6 +271,7 @@ void Node::addChild(Node *theChild) {
 	} else {
 		// node does not have gObject, so attach child
 		m_children.push_back(theChild);
+		propagateBBRoot();
 	}
 }
 
@@ -325,15 +326,10 @@ void Node::propagateBBRoot() {
 //    See Recipe 1 in for knowing how to iterate through children.
 
 void Node::updateBB () {
+	m_containerWC->init();
 	for (list<Node *>::iterator it = m_children.begin(), end = m_children.end(); it != end; ++it) {
 		Node *theChild = *it;
-		BBox *box = theChild->m_containerWC;
-		for (int i = 0; i < 3; i++) {
-			if (box->m_min[i] < m_containerWC->m_min[i])
-				m_containerWC->m_min[i] = box->m_min[i];
-			if (box->m_max[i] > m_containerWC->m_max[i])
-				m_containerWC->m_max[i] = box->m_max[i];
-		}
+		m_containerWC->include(theChild->m_containerWC);
 	}
 }
 
@@ -357,7 +353,7 @@ void Node::updateWC() {
 		m_placementWC->clone(m_parent->m_placementWC);
 		m_placementWC->add(m_placement);
 	} else {
-		m_placementWC = m_placement;
+		m_placementWC->clone(m_placement);
 	}
 	for (list<Node *>::iterator it = m_children.begin(), end = m_children.end(); it != end; ++it) {
 		Node *theChild = *it;
