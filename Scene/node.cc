@@ -271,9 +271,8 @@ void Node::addChild(Node *theChild) {
 	} else {
 		// node does not have gObject, so attach child
 		theChild->m_parent = this;
-		theChild->updateGS();
 		m_children.push_back(theChild);
-		propagateBBRoot();
+		theChild->updateGS();
 	}
 }
 
@@ -366,6 +365,7 @@ void Node::updateWC() {
 		Node *theChild = *it;
 		theChild->updateWC();
 	}
+	updateBB();
 }
 
 // @@ TODO:
@@ -378,7 +378,6 @@ void Node::updateWC() {
 
 void Node::updateGS() {
 	updateWC();
-	updateBB();
 	if (m_parent) m_parent->propagateBBRoot();
 }
 
