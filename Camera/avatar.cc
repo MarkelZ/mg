@@ -27,13 +27,21 @@ bool Avatar::walkOrFly(bool walkOrFly) {
 // Return: true if the avatar moved, false if not.
 
 bool Avatar::advance(float step) {
-
 	Node *rootNode = Scene::instance()->rootNode(); // root node of scene
 
 	if (m_walk)
 		m_cam->walk(step);
 	else
 		m_cam->fly(step);
+
+	if (rootNode->checkCollision(m_bsph)) {
+		if (m_walk)
+			m_cam->walk(-step);
+		else
+			m_cam->fly(-step);
+		return false;
+	}
+	m_bsph->m_centre = m_cam->getPosition();
 	return true;
 }
 

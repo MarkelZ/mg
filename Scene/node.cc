@@ -414,17 +414,17 @@ void Node::draw() {
 		BBoxGL::draw( m_containerWC );
 
 	/* =================== PUT YOUR CODE HERE ====================== */
-	rs->push(RenderState::modelview);
-	rs->addTrfm(RenderState::modelview, m_placementWC);
 	if (m_gObject) {
+		rs->push(RenderState::modelview);
+		rs->addTrfm(RenderState::modelview, m_placementWC);
 		m_gObject->draw();
+		rs->pop(RenderState::modelview);
 	} else {
 		for (list<Node *>::iterator it = m_children.begin(), end = m_children.end(); it != end; ++it) {
 			Node *theChild = *it;
 			theChild->draw();
 		}
 	}
-	rs->pop(RenderState::modelview);
 	/* =================== END YOUR CODE HERE ====================== */
 
 	// Restore shaders
@@ -463,8 +463,16 @@ void Node::frustumCull(Camera *cam) {
 
 const Node *Node::checkCollision(const BSphere *bsph) const {
 	if (!m_checkCollision) return 0;
-	/* =================== PUT YOUR CODE HERE ====================== */
-
+	if (m_gObject) {
+		if (BSphereBBoxIntersect(bsph, m_containerWC)) 
+			return this;
+	} else {
+		for(list<Node *>::const_iterator it = m_children.begin(), end = m_children.end(); it != end; ++it) {
+			const Node *theChild = *it;
+			const Node *col = theChild->checkCollision(bsph);
+			if (col) 
+				return col;
+		}
+	}
 	return 0; /* No collision */
-	/* =================== END YOUR CODE HERE ====================== */
 }
