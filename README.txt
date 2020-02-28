@@ -1,0 +1,2 @@
+Eszena grafoko lehenengo zatia ondorengo commit-ean dago:
+2487e715643745b9b60fa481279817c3fa48216a
