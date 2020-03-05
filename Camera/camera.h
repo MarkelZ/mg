@@ -5,6 +5,7 @@
 #define MAX_CLIP_PLANES  6
 
 #include <string>
+#include <list>
 #include "vector3.h"
 #include "plane.h"
 #include "bbox.h"
