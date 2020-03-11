@@ -13,9 +13,13 @@ RenderState::RenderState() :
 	m_backMaterial(0),
 	m_ambient(Vector3(0.05f, 0.05f, 0.05)),
 	m_activeShader(0),
-	m_drawBBox(false) {}
+	m_drawBBox(false),
+	m_sc(1.0f) {}
 
 RenderState::~RenderState() {}
+void RenderState::setSc(float v) { m_sc = v; }
+
+float RenderState::getSc() const { return m_sc; }
 
 ///////////////////////////////////////////////////////////////
 // Matrix stack stuff

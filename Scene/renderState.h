@@ -40,6 +40,9 @@ public:
 		modelview_projection
 	};
 
+	float getSc() const;
+	void setSc(float v);
+
 	///////////////////////////////////////////
 	// Matrix stuff
 
@@ -195,6 +198,8 @@ public:
 	void print() const;
 
 private:
+	float m_sc;
+
 	RenderState();
 	~RenderState();
 	RenderState(const RenderState &);

@@ -22,6 +22,8 @@ static int prevTime;
 // Global variables mouse
 static int mouse_pre_x = -1;
 static int mouse_pre_y = -1;
+//animation
+static float angle = 0.0f;
 
 static void switchAllLights(bool onOff) {
 	for(LightManager::iterator it = LightManager::instance()->begin(), end = LightManager::instance()->end();
@@ -538,8 +540,12 @@ void animate(int value) {
 
 	// ##### REPLACE WITH YOUR OWN GAME/APP MAIN CODE HERE #####
 	if (runAnimation) {
-		// Force a redisplay to render the new image
+		RenderState::instance()->setSc(cos(angle));
+		angle -= 0.1f;
+		if (angle <= 0) angle = M_PI*2;
+		printf("%f\n", RenderState::instance()->getSc());
 
+		// Force a redisplay to render the new image
 		glutPostRedisplay();
 	}
 	// ##### END OF GAME/APP MAIN CODE #####
@@ -570,10 +576,10 @@ int main(int argc, char** argv) {
 		InitLight();
 		InitShaders();
 		// Change the line below for different scenes
-		// displayNode = create_scene();
+		displayNode = create_scene();
 		// Other possible scenes:
 		//
-		displayNode = create_scene_city();
+		// displayNode = create_scene_city();
 	}
 
 	Scene::instance()->attach(displayNode);
