@@ -201,10 +201,6 @@ void ShaderProgram::beforeDraw() {
 	RenderState *rs = RenderState::instance();
 	static char buffer[1024];
 
-	if (this->has_capability("sc")) {
-		this->send_uniform("sc", rs->getSc());
-	}
-
 	this->send_uniform("modelToCameraMatrix", rs->top(RenderState::modelview));
 	this->send_uniform("modelToWorldMatrix", rs->top(RenderState::model));
 	this->send_uniform("cameraToClipMatrix", rs->top(RenderState::projection));
@@ -256,6 +252,10 @@ void ShaderProgram::beforeDraw() {
 			tex->bindGLUnit(Constants::gl_texunits::texture);
 			this->send_uniform("texture0", Constants::gl_texunits::texture); // Texture unit 0
 		}
+	}
+
+	if (this->has_capability("sc")) {
+		this->send_uniform("sc", rs->getSc());
 	}
 }
 

@@ -540,10 +540,10 @@ void animate(int value) {
 
 	// ##### REPLACE WITH YOUR OWN GAME/APP MAIN CODE HERE #####
 	if (runAnimation) {
-		RenderState::instance()->setSc(cos(angle));
+		RenderState::instance()->setSc(0.75f + 0.25f*cosf(angle)); // 1.0 eta 0.5 artean eskalatu
 		angle -= 0.1f;
 		if (angle <= 0) angle = M_PI*2;
-		printf("%f\n", RenderState::instance()->getSc());
+		// printf("%s\n", RenderState::instance()->getSc());
 
 		// Force a redisplay to render the new image
 		glutPostRedisplay();

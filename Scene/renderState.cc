@@ -17,9 +17,9 @@ RenderState::RenderState() :
 	m_sc(1.0f) {}
 
 RenderState::~RenderState() {}
-void RenderState::setSc(float v) { m_sc = v; }
 
 float RenderState::getSc() const { return m_sc; }
+void RenderState::setSc(float v) { m_sc = v; }
 
 ///////////////////////////////////////////////////////////////
 // Matrix stack stuff
