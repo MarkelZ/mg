@@ -39,18 +39,50 @@ varying vec2 f_texCoord;
 
 void main() {
 	gl_Position = modelToClipMatrix * vec4(v_position, 1);
-	// Argiztatzea
-	vec3 n = normalize((modelToCameraMatrix * vec4(v_normal, 0.0)).xyz);
-	vec3 l = normalize(-theLights[0].position.xyz);
-	float dotnl = dot(n, l);
-	vec3 r = 2*dotnl*n - l;
-	vec3 v = normalize((modelToCameraMatrix * vec4(v_position, 0.0)).xyz);
-	vec3 i_diff = theMaterial.diffuse * theLights[0].diffuse;
-	vec3 i_spec = pow(max(0, dot(r, v)), theMaterial.shininess) * (theMaterial.specular * theLights[0].specular);
-	f_color = vec4(scene_ambient + max(0, dotnl)*(i_diff + i_spec), 1.0);
 
-	// norabidezko argiaren kalkuluak
-	// vec4 position_cs = modelToCameraMatrix * vec4(v_position, 1.0);
-	// vec3 l = (theLights[0].position - position_cs).xyz;
-	// l = normalize(l.xyz);
+	vec3 i_diff = vec3(0, 0, 0);
+	vec3 i_spec = vec3(0, 0, 0);
+
+	// oraingoz argi guztiak direkzionalak bezala tratatzen dira. 
+	for (int i = 0; i < active_lights_n; i++) 
+	{
+		if (theLights[i].position.w == 0.0f) 
+		{
+			// directional
+			vec3 n = normalize((modelToCameraMatrix * vec4(v_normal, 0.0)).xyz);
+			vec3 l = normalize(-theLights[0].position.xyz);
+			float dotnl = dot(n, l);
+			vec3 r = 2*dotnl*n - l;
+			vec3 v = normalize((modelToCameraMatrix * vec4(v_position, 0.0)).xyz);
+			float m_0_dnl = max(0, dotnl);
+			i_diff += m_0_dnl * theMaterial.diffuse * theLights[0].diffuse;
+			i_spec += m_0_dnl * pow(max(0, dot(r, v)), theMaterial.shininess) * (theMaterial.specular * theLights[0].specular);
+		} 
+		else if (theLights[i].cosCutOff == 0.0f) 
+		{
+			// positional
+			vec3 n = normalize((modelToCameraMatrix * vec4(v_normal, 0.0)).xyz);
+			vec3 l = normalize(-theLights[0].position.xyz);
+			float dotnl = dot(n, l);
+			vec3 r = 2*dotnl*n - l;
+			vec3 v = normalize((modelToCameraMatrix * vec4(v_position, 0.0)).xyz);
+			float m_0_dnl = max(0, dotnl);
+			i_diff += m_0_dnl * theMaterial.diffuse * theLights[0].diffuse;
+			i_spec += m_0_dnl * pow(max(0, dot(r, v)), theMaterial.shininess) * (theMaterial.specular * theLights[0].specular);
+		} 
+		else 
+		{
+			// spotlight
+			vec3 n = normalize((modelToCameraMatrix * vec4(v_normal, 0.0)).xyz);
+			vec3 l = normalize(-theLights[0].position.xyz);
+			float dotnl = dot(n, l);
+			vec3 r = 2*dotnl*n - l;
+			vec3 v = normalize((modelToCameraMatrix * vec4(v_position, 0.0)).xyz);
+			float m_0_dnl = max(0, dotnl);
+			i_diff += m_0_dnl * theMaterial.diffuse * theLights[0].diffuse;
+			i_spec += m_0_dnl * pow(max(0, dot(r, v)), theMaterial.shininess) * (theMaterial.specular * theLights[0].specular);
+		}
+	}
+
+	f_color = vec4(scene_ambient + i_diff + i_spec, 1.0);
 }

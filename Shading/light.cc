@@ -84,12 +84,13 @@ const float *Light::getPositionEye_4fv() const {
 
 void Light::placeScene() {
 
-	if( ! m_switched ) return;
+	if ( ! m_switched ) return;
 	RenderState *rs = RenderState::instance();
 	Trfm3D &modelView = rs->top(RenderState::modelview);
 
 	/* =================== PUT YOUR CODE HERE ====================== */
-
+	m_positionEye = modelView.transformPoint(m_position);
+	m_spotDirectionEye = modelView.transformPoint(m_spotDirection);
 	/* =================== END YOUR CODE HERE ====================== */
 }
 
