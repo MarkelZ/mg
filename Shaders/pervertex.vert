@@ -65,18 +65,6 @@ void main() {
 		else if (theLights[i].cosCutOff == 0.0f) 
 		{
 			// positional
-			vec3 l = normalize(theLights[i].position.xyz - p);
-
-			float dotnl = dot(n, l);
-			vec3 r = 2*dotnl*n - l;
-			float m_0_dnl = max(0, dotnl);
-			i_diff = theMaterial.diffuse * theLights[i].diffuse;
-			i_spec = pow(max(0, dot(r, v)), theMaterial.shininess) * theMaterial.specular * theLights[i].specular;
-			i_tot += m_0_dnl * (i_diff + i_spec);
-		} 
-		else 
-		{
-			// spotlight
 			vec3 l_dir = theLights[i].position.xyz - p;
 			float l_mod2 = dot(l_dir, l_dir);
 			float l_mod = sqrt(l_mod2);
@@ -85,14 +73,27 @@ void main() {
 				theLights[i].attenuation[0] + 
 				theLights[i].attenuation[1] * l_mod + 
 				theLights[i].attenuation[2] * l_mod2);
-			float c = max(dot(-l, normalize(theLights[i].spotDir)), 0);
 
 			float dotnl = dot(n, l);
 			vec3 r = 2*dotnl*n - l;
 			float m_0_dnl = max(0, dotnl);
 			i_diff = theMaterial.diffuse * theLights[i].diffuse;
 			i_spec = pow(max(0, dot(r, v)), theMaterial.shininess) * theMaterial.specular * theLights[i].specular;
-			i_tot += c * d * m_0_dnl * (i_diff + i_spec);
+			i_tot += d * m_0_dnl * (i_diff + i_spec);
+		} 
+		else 
+		{
+			// spotlight
+			vec3 l = normalize(theLights[i].position.xyz - p);
+			float c = max(dot(-l, normalize(theLights[i].spotDir)), 0);
+			if (c > theLights[i].cosCutOff) {
+				float dotnl = dot(n, l);
+				vec3 r = 2*dotnl*n - l;
+				float m_0_dnl = max(0, dotnl);
+				i_diff = theMaterial.diffuse * theLights[i].diffuse;
+				i_spec = pow(max(0, dot(r, v)), theMaterial.shininess) * theMaterial.specular * theLights[i].specular;
+				i_tot += c * m_0_dnl * (i_diff + i_spec);
+			}
 		}
 	}
 
