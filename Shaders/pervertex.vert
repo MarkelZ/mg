@@ -46,12 +46,9 @@ vec3 get_light_value(vec3 n, vec3 l, vec3 v, struct light_t theLight) {
 
 void main() {
 	gl_Position = modelToClipMatrix * vec4(v_position, 1);
-
 	f_texCoord = v_texCoord;
 
-	vec3 i_diff = vec3(0, 0, 0);
-	vec3 i_spec = vec3(0, 0, 0);
-	vec3 i_tot = vec3(0, 0, 0);
+	vec3 i_diff, i_spec, i_tot;
 
 	vec3 p = (modelToCameraMatrix * vec4(v_position, 1.0)).xyz;
 	vec3 n = normalize((modelToCameraMatrix * vec4(v_normal, 0.0)).xyz);
