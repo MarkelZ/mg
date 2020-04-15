@@ -36,7 +36,7 @@ vec3 get_light_value(vec3 n, vec3 l, vec3 v, struct light_t theLight) {
 }
 
 void main() {
-	vec3 i_diff, i_spec, i_tot;
+	vec3 i_tot = vec3(0, 0, 0);
 
 	vec3 p = f_position;
 	vec3 n = normalize(f_normal);
@@ -72,7 +72,7 @@ void main() {
 
 			float c = max(dot(-l, normalize(theLights[i].spotDir)), 0);
 			if (c > theLights[i].cosCutOff)
-				i_tot += c * get_light_value(n, l, v, theLights[i]);
+				i_tot += pow(c, theLights[i].exponent) * get_light_value(n, l, v, theLights[i]);
 		}
 	}
 
