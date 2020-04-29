@@ -36,11 +36,11 @@ attribute vec2 v_texCoord;
 varying vec4 f_color;
 varying vec2 f_texCoord;
 
-vec3 get_light_value(vec3 n, vec3 l, vec3 v, struct light_t theLight) {
+vec3 get_light_value(vec3 n, vec3 l, vec3 v, int i) {
 			float dotnl = dot(n, l);
 			vec3 r = 2*dotnl*n - l;
-			vec3 i_diff = theMaterial.diffuse * theLight.diffuse;
-			vec3 i_spec = pow(max(0, dot(r, v)), theMaterial.shininess) * theMaterial.specular * theLight.specular;
+			vec3 i_diff = theMaterial.diffuse * theLights[i].diffuse;
+			vec3 i_spec = pow(max(0, dot(r, v)), theMaterial.shininess) * theMaterial.specular * theLights[i].specular;
 			return max(0, dotnl) * (i_diff + i_spec);
 }
 
@@ -61,7 +61,7 @@ void main() {
 			// directional
 			vec3 l = -normalize(theLights[i].position.xyz);
 
-			i_tot += get_light_value(n, l, v, theLights[i]);
+			i_tot += get_light_value(n, l, v, i);
 		} 
 		else if (theLights[i].cosCutOff == 0.0f) 
 		{
@@ -75,7 +75,7 @@ void main() {
 				theLights[i].attenuation[1] * l_mod + 
 				theLights[i].attenuation[2] * l_mod2);
 
-			i_tot += d * get_light_value(n, l, v, theLights[i]);
+			i_tot += d * get_light_value(n, l, v, i);
 		} 
 		else 
 		{
@@ -84,7 +84,7 @@ void main() {
 
 			float c = max(dot(-l, normalize(theLights[i].spotDir)), 0);
 			if (c > theLights[i].cosCutOff)
-				i_tot += pow(c, theLights[i].exponent) * get_light_value(n, l, v, theLights[i]);
+				i_tot += pow(c, theLights[i].exponent) * get_light_value(n, l, v, i);
 		}
 	}
 
