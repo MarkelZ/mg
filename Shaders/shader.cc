@@ -257,6 +257,13 @@ void ShaderProgram::beforeDraw() {
 	if (this->has_capability("sc")) {
 		this->send_uniform("sc", rs->getSc());
 	}
+	if (this->has_capability("specmap")) {
+		tex = mat->getSpecularMap();
+		if (tex != 0) {
+			tex->bindGLUnit(Constants::gl_texunits::specular);
+			this->send_uniform("specmap", Constants::gl_texunits::specular);
+		}
+	}
 }
 
 void ShaderProgram::print() const {
