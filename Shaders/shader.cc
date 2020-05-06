@@ -254,9 +254,9 @@ void ShaderProgram::beforeDraw() {
 		}
 	}
 
-	if (this->has_capability("sc")) {
-		this->send_uniform("sc", rs->getSc());
-	}
+	// if (this->has_capability("sc")) {
+	// 	this->send_uniform("sc", rs->getSc());
+	// }
 	if (this->has_capability("specmap")) {
 		tex = mat->getSpecularMap();
 		if (tex != 0) {
