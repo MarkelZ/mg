@@ -14,6 +14,7 @@
 #include <string>
 #include <list>
 #include "trfmStack.h"
+#include "camera.h"
 #include "material.h"
 #include "light.h"
 #include "textureManager.h"
@@ -39,9 +40,6 @@ public:
 		texture,
 		modelview_projection
 	};
-
-	float getSc() const;
-	void setSc(float v);
 
 	///////////////////////////////////////////
 	// Matrix stuff
@@ -121,6 +119,12 @@ public:
 	ShaderProgram *getShader();
 
 	///////////////////////////////////////////
+	// Camera
+
+	void setCamera(Camera *cam);
+	Camera *getCamera() const;
+
+	///////////////////////////////////////////
 	// Lights
 
 	/**
@@ -198,8 +202,6 @@ public:
 	void print() const;
 
 private:
-	float m_sc;
-
 	RenderState();
 	~RenderState();
 	RenderState(const RenderState &);
@@ -214,6 +216,10 @@ private:
 	TrfmStack m_projectionStack;          // clip space to NDC space
 	TrfmStack m_textureStack;             // tex. coordinates: object space to texture space
 	TrfmStack m_modelViewProjectionStack; // model space to NDC space
+
+	// Lights
+
+	Camera *m_camera; // The camera we are rendering from
 
 	// Lights
 

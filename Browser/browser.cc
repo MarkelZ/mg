@@ -22,8 +22,6 @@ static int prevTime;
 // Global variables mouse
 static int mouse_pre_x = -1;
 static int mouse_pre_y = -1;
-//animation
-static float angle = 0.0f;
 
 static void switchAllLights(bool onOff) {
 	for(LightManager::iterator it = LightManager::instance()->begin(), end = LightManager::instance()->end();
@@ -214,6 +212,7 @@ static void Render(Camera *theCamera) {
 	RenderState *rs = RenderState::instance();
 	LightManager *lmgr = LightManager::instance();
 
+	rs->setCamera(theCamera);
 	// draw the background color
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	rs->loadTrfm(RenderState::projection, theCamera->projectionTrfm());
@@ -540,12 +539,8 @@ void animate(int value) {
 
 	// ##### REPLACE WITH YOUR OWN GAME/APP MAIN CODE HERE #####
 	if (runAnimation) {
-		RenderState::instance()->setSc(0.75f + 0.25f*cosf(angle)); // 1.0 eta 0.5 artean eskalatu
-		angle -= 0.1f;
-		if (angle <= 0) angle = M_PI*2;
-		// printf("%f\n", RenderState::instance()->getSc());
-
 		// Force a redisplay to render the new image
+
 		glutPostRedisplay();
 	}
 	// ##### END OF GAME/APP MAIN CODE #####
