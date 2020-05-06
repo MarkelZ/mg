@@ -37,4 +37,41 @@ varying vec3 f_spotDirection[4];  // tangent space
 
 void main() {
 	gl_Position = modelToClipMatrix * vec4(v_position, 1.0);
+
+	// get 3x3 modelview matrix
+	mat3 MV3x3 = mat3(modelToCameraMatrix);
+
+	// Normal, tangent and bitangent in camera coordinates
+	// (object space -> camera space)
+	vec3 t = normalize((modelToCameraMatrix * vec4(v_TBN_t, 0.0)).xyz);
+	vec3 b = normalize((modelToCameraMatrix * vec4(v_TBN_b, 0.0)).xyz);
+	vec3 n = normalize((modelToCameraMatrix * vec4(v_normal, 0.0)).xyz);
+
+	// matrix to transform from camera space to tangent space
+	mat3 cameraToTangent = mat3(t, b, n); 
+
+	// Ligth direction, f_viewDirection, f_spotDirection are in camera space
+	// (camera space -> tangent space)
+	vec3 p = (modelToCameraMatrix * vec4(v_position, 1.0)).xyz;
+	vec3 l;
+
+	for (int i = 0; i < active_lights_n; i++) {
+		if (theLights[i].position.w == 0.0f) 
+		{
+			// directional
+			l = -normalize(theLights[i].position.xyz);
+		} 
+		else if (theLights[i].cosCutOff == 0.0f) {
+			// positional
+			l = normalize(theLights[i].position.xyz - p);
+		} 
+		else {
+			// spotlight
+			l = normalize(theLights[i].position.xyz - p);
+			f_spotDirection[i] = theLights[i].spotDir * cameraToTangent;
+		}
+		f_lightDirection[i] = l * cameraToTangent;
+	}
+	vec3 v = -normalize(p);
+	f_viewDirection = v * cameraToTangent;
 }
