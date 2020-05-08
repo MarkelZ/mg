@@ -416,6 +416,7 @@ void Node::draw() {
 	/* =================== PUT YOUR CODE HERE ====================== */
 	if (m_gObject) {
 		rs->push(RenderState::modelview);
+		//rs->loadTrfm(RenderState::model, m_placementWC); // ?? agian ez da hemen
 		rs->addTrfm(RenderState::modelview, m_placementWC);
 		m_gObject->draw();
 		rs->pop(RenderState::modelview);

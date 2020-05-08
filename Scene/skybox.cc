@@ -109,16 +109,22 @@ void DisplaySky(Camera *cam) {
 	ShaderProgram *prev_shader = rs->getShader();
 
 	// settings for the skybox to be drawn
-	rs->setShader(skynode->getShader());
+	Trfm3D *camTranslation = new Trfm3D();
+	camTranslation->setTrans(cam->getPosition());
+
 	rs->push(RenderState::modelview);
+	rs->setShader(skynode->getShader());
+	rs->addTrfm(RenderState::modelview, camTranslation);
+
 	glDisable(GL_DEPTH_TEST);
 
 	// draw skybox object
 	skynode->getGobject()->draw();
 
-	// restore previous data
+	// restore previous state
 	rs->setShader(prev_shader);
 	rs->pop(RenderState::modelview);
+
 	glEnable(GL_DEPTH_TEST);
 	/* =================== END YOUR CODE HERE ====================== */
 }
