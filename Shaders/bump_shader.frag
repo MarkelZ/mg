@@ -52,24 +52,24 @@ void main() {
 
 	for (int i = 0; i < active_lights_n; i++) 
 	{
+		vec3 l = normalize(f_lightDirection[i]);
 		if (theLights[i].position.w == 0.0f) 
 		{
 			// directional
-			i_tot += get_light_value(N, f_lightDirection[i], f_viewDirection, i);
+			i_tot += get_light_value(N, l, v, i);
 		} 
 		else if (theLights[i].cosCutOff == 0.0f) 
 		{
 			// positional
 			float d = 1.0; // ahuldurarik ez
-
-			i_tot += d * get_light_value(N, f_lightDirection[i], f_viewDirection, i);
+			i_tot += d * get_light_value(N, l, v, i);
 		} 
 		else 
 		{
 			// spotlight
-			float c = max(dot(-f_lightDirection[i], normalize(theLights[i].spotDir)), 0);
+			float c = max(dot(-l, normalize(f_spotDirection[i])), 0);
 			if (c > theLights[i].cosCutOff)
-				i_tot += pow(c, theLights[i].exponent) * get_light_value(N, f_lightDirection[i], f_viewDirection, i);
+				i_tot += pow(c, theLights[i].exponent) * get_light_value(N, l, v, i);
 		}
 	}
 
