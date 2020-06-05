@@ -1,2 +1,10 @@
-Eszena grafoko lehenengo zatia ondorengo commit-ean dago:
-2487e715643745b9b60fa481279817c3fa48216a
+Master adarrari dagokion guztia burutu dut, hau da, itzalak eta proiekzio-testurak ezik gainerako ataza guztiak:
+
+- Lehenengo eta bigarren praktikei dagokien guztia.
+- Specular mapping.
+- Bump mapping.
+- Cubemap.
+
+Itzalak egiten hasi nintzen adar berri batean, shadow adarra, baina ez zen ongi atera eta bertan behera utzi nuen. 
+
+Proiekzio-testurak ez ditut egin.
